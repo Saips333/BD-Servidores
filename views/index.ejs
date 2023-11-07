@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Remuneração de Professores</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Remuneração de Professores</h1>
+  <canvas id="myChart" width="400" height="400"></canvas>
+
+  <script>
+    var nomes = [];
+    var salarios = [];
+
+    // Dados vindos do servidor
+    var professores = JSON.parse('<%- JSON.stringify(professores) %>');
+
+    professores.forEach(function(professor) {
+      nomes.push(professor.nome);
+      salarios.push(professor.salario);
+    });
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: nomes,
+        datasets: [{
+          label: 'Salário dos Professores',
+          data: salarios,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
