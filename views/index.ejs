@@ -5,19 +5,29 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <div>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/servidores">Servidores</a></li>
+      </ul>
+    </nav>  
+  </div>
   <h1>Remuneração de Professores</h1>
-  <canvas id="myChart" width="400" height="400"></canvas>
+  <div style="width: 800px;">
+    <canvas id="myChart" width="50" height="50"></canvas>
+  </div>
 
   <script>
     var nomes = [];
-    var salarios = [];
+    var cpfs = [];
 
     // Dados vindos do servidor
-    var professores = JSON.parse('<%- JSON.stringify(professores) %>');
+    var professores = JSON.parse('<%- JSON.stringify(results) %>');
 
     professores.forEach(function(professor) {
       nomes.push(professor.nome);
-      salarios.push(professor.salario);
+      cpfs.push(professor.cpf);
     });
 
     var ctx = document.getElementById('myChart').getContext('2d');
@@ -28,7 +38,7 @@
         labels: nomes,
         datasets: [{
           label: 'Salário dos Professores',
-          data: salarios,
+          data: cpfs,
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1

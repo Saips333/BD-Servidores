@@ -7,8 +7,9 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 // Rotas
-const professoresRouter = require('./routes/professores');
-app.use('/professores', professoresRouter);
+const router = require('./routes/professores');
+app.use('/', router);
+app.use('/servidores', router);
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
