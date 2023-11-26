@@ -21,17 +21,17 @@
         </nav>  
       </div>
 
-  <h1>Informações sobre Servidores</h1>
+  <h1>Salários acima da média</h1>
 
   <table id="dataTable" class="display">
     <thead>
       <tr>
         <th>CPF</th>
         <th>Nome do Servidor</th>
-        <th>Bruto</th>
-        <th>Outras deduções</th>
-        <th>Férias</th>
-        <th>Natal</th>
+        <th>Cargo</th>
+        <th>Universidade</th>
+        <th>Instituto</th>
+        <th>Salario</th>
       </tr>
     </thead>
     <tbody>
@@ -39,10 +39,10 @@
         <tr>
           <td><%= servidor.cpf %></td>
           <td><%= servidor.NomeServidor %></td>
-          <td data-order="<%= servidor.bruto %>"><%= servidor.bruto %></td>
-          <td data-order="<%= servidor.outras_deducoes %>"><%= servidor.outras_deducoes %></td>
-          <td data-order="<%= servidor.ferias %>"><%= servidor.ferias %></td>
-          <td data-order="<%= servidor.natal %>"><%= servidor.natal %></td>
+          <td><%= servidor.cargo %></td>
+          <td><%= servidor.NomeUniversidade %></td>
+          <td><%= servidor.NomeInstituto %></td>
+          <td data-order="<%= servidor.Salario %>"><%= servidor.Salario %></td>
         </tr>
       <% } %>
     </tbody>

@@ -12,20 +12,21 @@ router.get('/', (req, res) => {
 });
 
 router.get('/media', (req, res) => {
-  connection.query(`SELECT
+  connection.query(`
+  SELECT
   U.nome AS NomeUniversidade,
   S.cargo ,
   AVG(R.bruto) AS MediaSalario
-FROM
-  Universidade U
-JOIN
-  Instituto I ON U.id_uni = I.fk_Universidade_id_uni
-JOIN
-  Servidor S ON I.nome = S.fk_Instituto_nome AND I.fk_Universidade_id_uni = S.fk_Universidade_id_uni
-JOIN
-  Remuneracao R ON S.id_servidor = R.fk_Servidor_id_servidor
-GROUP BY
-  U.nome, S.cargo;
+  FROM
+    Universidade U
+  JOIN
+    Instituto I ON U.id_uni = I.fk_Universidade_id_uni
+  JOIN
+    Servidor S ON I.nome = S.fk_Instituto_nome AND I.fk_Universidade_id_uni = S.fk_Universidade_id_uni
+  JOIN
+    Remuneracao R ON S.id_servidor = R.fk_Servidor_id_servidor
+  GROUP BY
+    U.nome, S.cargo;
 `, (error, results) => {
     if (error) throw error;
 
@@ -34,7 +35,8 @@ GROUP BY
 });
 
 router.get('/remuneracao', (req, res) => {
-  connection.query(`SELECT 
+  connection.query(`
+  SELECT 
     S.cpf, 
     S.nome AS NomeServidor, 
     R.bruto, 
@@ -46,8 +48,61 @@ router.get('/remuneracao', (req, res) => {
   LEFT JOIN 
     Remuneracao R ON S.id_servidor = R.fk_Servidor_id_servidor;`, (error, results) => {
       if (error) throw error;
-      console.log(results);
+
       res.render('remuneracao', { results: results });
+  });
+});
+
+router.get('/deducoes', (req, res) => {
+  connection.query(`
+  SELECT
+    U.nome AS NomeUniversidade,
+    I.nome AS NomeInstituto,
+    SUM(R.outras_deducoes) AS TotalDeducoes
+  FROM
+      Universidade U
+  JOIN
+      Instituto I ON U.id_uni = I.fk_Universidade_id_uni
+  JOIN
+      Servidor S ON I.nome = S.fk_Instituto_nome AND I.fk_Universidade_id_uni = S.fk_Universidade_id_uni
+  JOIN
+      Remuneracao R ON S.id_servidor = R.fk_Servidor_id_servidor
+  GROUP BY
+      U.nome, I.nome;
+  `, (error, results) => {
+    if (error) throw error;
+
+    res.render('deducoes', { results: results });
+  });
+});
+router.get('/acima', (req, res) => {
+  connection.query(`
+  SELECT
+    S.cpf,
+    S.nome AS NomeServidor,
+    S.cargo,
+    U.nome AS NomeUniversidade,
+    I.nome AS NomeInstituto,
+    R.bruto AS Salario
+  FROM
+      Servidor S
+  JOIN
+      Remuneracao R ON S.id_servidor = R.fk_Servidor_id_servidor
+  JOIN
+      Universidade U ON S.fk_Universidade_id_uni = U.id_uni
+  JOIN
+      Instituto I ON S.fk_Instituto_nome = I.nome AND S.fk_Universidade_id_uni = I.fk_Universidade_id_uni
+  WHERE
+      R.bruto > (
+          SELECT AVG(R2.bruto)
+          FROM Remuneracao R2
+          JOIN Servidor S2 ON R2.fk_Servidor_id_servidor = S2.id_servidor
+          WHERE S2.fk_Universidade_id_uni = S.fk_Universidade_id_uni
+      );
+  `, (error, results) => {
+    if (error) throw error;
+
+    res.render('acima', { results: results });
   });
 });
 module.exports = router;
