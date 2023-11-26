@@ -1,0 +1,56 @@
+<!-- info.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informações sobre Servidores</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+</head>
+<body>
+    <div>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/media">Media</a></li>
+          </ul>
+        </nav>  
+      </div>
+
+  <h1>Informações sobre Servidores</h1>
+
+  <table id="dataTable" class="display">
+    <thead>
+      <tr>
+        <th>CPF</th>
+        <th>Nome do Servidor</th>
+        <th>Cargo</th>
+        <th>Nome da Universidade</th>
+        <th>Nome do Instituto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (const professor of results) { %>
+        <tr>
+          <td><%= professor.cpf %></td>
+          <td><%= professor.NomeServidor %></td>
+          <td><%= professor.cargo %></td>
+          <td><%= professor.NomeUniversidade %></td>
+          <td><%= professor.NomeInstituto %></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <script>
+    // Inicialize o DataTable
+    $(document).ready(function() {
+      $('#dataTable').DataTable();
+    });
+  </script>
+
+</body>
+</html>

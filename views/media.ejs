@@ -1,0 +1,86 @@
+<!-- media.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Média Salarial por Cargo em Cada Universidade</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/media">Média Salarial</a></li>
+      </ul>
+    </nav>  
+  </div>
+  
+  <h1>Média Salarial por Cargo em Cada Universidade</h1>
+  <div style="width: 800px;">
+    <canvas id="barChart" width="50" height="50"></canvas>
+  </div>
+
+  <script>
+    // Dados vindos do servidor
+    var results = JSON.parse('<%- JSON.stringify(results) %>');
+    var universidades = Array.from(new Set(results.map(result => result.NomeUniversidade))); // Lista de universidades única
+    var cargos = Array.from(new Set(results.map(result => result.cargo))); // Lista de cargos única
+
+    var datasets = cargos.map(cargo => {
+      return {
+        label: cargo,
+        data: universidades.map(universidade => {
+          var salario = results.find(result => result.cargo === cargo && result.NomeUniversidade === universidade);
+          return salario ? salario.MediaSalario : null;
+        }),
+        backgroundColor: getUniversityColor(cargo),
+        borderColor: 'rgba(255, 255, 255, 1)',
+        borderWidth: 1,
+      };
+    });
+
+    function getUniversityColor(cargo) {
+      // Use uma lógica de cores específica para cada cargo
+      var cargoColors = {
+        'Professor': 'rgba(255, 99, 132, 0.5)',
+        'Pesquisador': 'rgba(75, 192, 192, 0.5)',
+        'Coordenador': 'rgba(255, 205, 86, 0.5)',
+      };
+      // Se o cargo não estiver mapeado, use uma cor padrão
+      return cargoColors[cargo] || 'rgba(153, 102, 255, 0.5)';
+    }
+
+    var ctx = document.getElementById('barChart').getContext('2d');
+
+    var barChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: universidades,
+        datasets: datasets,
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Média Salarial (em reais)',
+            },
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Universidade',
+            },
+          },
+        },
+      },
+    });
+  </script>
+
+</body>
+</html>

@@ -7,7 +7,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 // Rotas
-const router = require('./routes/professores');
+const router = require('./routes/consultas');
 app.use('/', router);
 app.use('/servidores', router);
 
