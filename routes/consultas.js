@@ -33,4 +33,21 @@ GROUP BY
   });
 });
 
+router.get('/remuneracao', (req, res) => {
+  connection.query(`SELECT 
+    S.cpf, 
+    S.nome AS NomeServidor, 
+    R.bruto, 
+    R.outras_deducoes, 
+    R.ferias, 
+    R.natal 
+  FROM 
+    Servidor S 
+  LEFT JOIN 
+    Remuneracao R ON S.id_servidor = R.fk_Servidor_id_servidor;`, (error, results) => {
+      if (error) throw error;
+      console.log(results);
+      res.render('remuneracao', { results: results });
+  });
+});
 module.exports = router;

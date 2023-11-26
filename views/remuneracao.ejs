@@ -1,11 +1,9 @@
-<!-- info.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Informações sobre Servidores</title>
+  <title> Servidores e Remunerações</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
@@ -15,7 +13,7 @@
         <nav>
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/media">Média</a></li>
+             <li><a href="/media">Média</a></li>
             <li><a href="/remuneracao">Remuneração</a></li>
           </ul>
         </nav>  
@@ -28,9 +26,10 @@
       <tr>
         <th>CPF</th>
         <th>Nome do Servidor</th>
-        <th>Cargo</th>
-        <th>Nome da Universidade</th>
-        <th>Nome do Instituto</th>
+        <th>Bruto</th>
+        <th>Outras deduções</th>
+        <th>Férias</th>
+        <th>Natal</th>
       </tr>
     </thead>
     <tbody>
@@ -38,9 +37,10 @@
         <tr>
           <td><%= servidor.cpf %></td>
           <td><%= servidor.NomeServidor %></td>
-          <td><%= servidor.cargo %></td>
-          <td><%= servidor.NomeUniversidade %></td>
-          <td><%= servidor.NomeInstituto %></td>
+          <td data-order="<%= servidor.bruto %>"><%= servidor.bruto %></td>
+          <td><%= servidor.outras_deducoes %></td>
+          <td><%= servidor.ferias %></td>
+          <td><%= servidor.natal %></td>
         </tr>
       <% } %>
     </tbody>
@@ -52,6 +52,5 @@
       $('#dataTable').DataTable();
     });
   </script>
-
 </body>
 </html>
