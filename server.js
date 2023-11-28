@@ -9,7 +9,7 @@ app.set('views', __dirname + '/views');
 // Rotas
 const router = require('./routes/consultas');
 app.use('/', router);
-app.use('/servidores', router);
+app.use(express.static(__dirname + '/public'));
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);

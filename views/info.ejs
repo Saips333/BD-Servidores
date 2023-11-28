@@ -7,47 +7,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Informações sobre Servidores</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="/style.css">
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 </head>
 <body>
-    <div>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/media">Média</a></li>
-            <li><a href="/remuneracao">Remuneração</a></li>
-            <li><a href="/deducoes">Total Deduções</a></li>
-            <li><a href="/acima">Salários acima da média</a></li>
-          </ul>
-        </nav>  
-      </div>
-
-  <h1>Informações sobre Servidores</h1>
-
-  <table id="dataTable" class="display">
-    <thead>
-      <tr>
-        <th>CPF</th>
-        <th>Nome do Servidor</th>
-        <th>Cargo</th>
-        <th>Nome da Universidade</th>
-        <th>Nome do Instituto</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (const servidor of results) { %>
-        <tr>
-          <td><%= servidor.cpf %></td>
-          <td><%= servidor.NomeServidor %></td>
-          <td><%= servidor.cargo %></td>
-          <td><%= servidor.NomeUniversidade %></td>
-          <td><%= servidor.NomeInstituto %></td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
-
+  <header>
+    <div class="navbar">
+      <a href="/"><p>Informações</p></a>
+      <a href="/media"><p>Média</p></a>
+      <a href="/remuneracao"><p>Remuneração</p></a>
+      <a href="/deducoes"><p>Total Deduções</p></a>
+      <a href="/acima"><p>Salários acima da média</p></a>
+    </div>
+  </header>
+  <div class="page-container">
+    <div class="content-wrap">
+      <h1 class="title">Informações sobre Servidores</h1>
+      <table id="dataTable" class="display">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>CPF</th>
+            <th>Nome do Servidor</th>
+            <th>Cargo</th>
+            <th>Nome da Universidade</th>
+            <th>Nome do Instituto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (const servidor of results) { %>
+            <tr>
+              <td><%= servidor.id_servidor %></td>
+              <td><%= servidor.cpf %></td>
+              <td><%= servidor.NomeServidor %></td>
+              <td><%= servidor.cargo %></td>
+              <td><%= servidor.NomeUniversidade %></td>
+              <td><%= servidor.NomeInstituto %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    <footer>
+      Desenvolvido por Nicolas, Pedro e Tsai - 2023.
+    </footer>
+  </div>
   <script>
     // Inicialize o DataTable
     $(document).ready(function() {

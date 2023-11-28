@@ -5,49 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> Servidores e Remunerações</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="/style.css">
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 </head>
 <body>
-    <div>
-        <nav>
-          <ul>
-            <li><a href="/">Home</a></li>
-             <li><a href="/media">Média</a></li>
-            <li><a href="/remuneracao">Remuneração</a></li>
-            <li><a href="/deducoes">Total Deduções</a></li>
-            <li><a href="/acima">Salários acima da média</a></li>
-          </ul>
-        </nav>  
-      </div>
+  <header>
+    <div class="navbar">
+      <a href="/"><p>Informações</p></a>
+      <a href="/media"><p>Média</p></a>
+      <a href="/remuneracao"><p>Remuneração</p></a>
+      <a href="/deducoes"><p>Total Deduções</p></a>
+      <a href="/acima"><p>Salários acima da média</p></a>
+    </div>
+  </header>
 
-  <h1>Informações sobre Servidores</h1>
-
-  <table id="dataTable" class="display">
-    <thead>
-      <tr>
-        <th>CPF</th>
-        <th>Nome do Servidor</th>
-        <th>Bruto</th>
-        <th>Outras deduções</th>
-        <th>Férias</th>
-        <th>Natal</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (const servidor of results) { %>
-        <tr>
-          <td><%= servidor.cpf %></td>
-          <td><%= servidor.NomeServidor %></td>
-          <td data-order="<%= servidor.bruto %>"><%= servidor.bruto %></td>
-          <td data-order="<%= servidor.outras_deducoes %>"><%= servidor.outras_deducoes %></td>
-          <td data-order="<%= servidor.ferias %>"><%= servidor.ferias %></td>
-          <td data-order="<%= servidor.natal %>"><%= servidor.natal %></td>
-        </tr>
-      <% } %>
-    </tbody>
-  </table>
-
+  <div class="page-container">
+    <div class="content-wrap">
+      <h1 class="title">Informações sobre Servidores</h1>
+      <table id="dataTable" class="display">
+        <thead>
+          <tr>
+            <th>CPF</th>
+            <th>Nome do Servidor</th>
+            <th>Bruto</th>
+            <th>Outras deduções</th>
+            <th>Férias</th>
+            <th>Natal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (const servidor of results) { %>
+            <tr>
+              <td><%= servidor.cpf %></td>
+              <td><%= servidor.NomeServidor %></td>
+              <td data-order="<%= servidor.bruto %>"><%= servidor.val_bruto %></td>
+              <td data-order="<%= servidor.outras_deducoes %>"><%= servidor.outras_deducoes %></td>
+              <td data-order="<%= servidor.ferias %>"><%= servidor.val_ferias %></td>
+              <td data-order="<%= servidor.natal %>"><%= servidor.val_natal %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    <footer>
+      Desenvolvido por Nicolas, Pedro e Tsai - 2023.
+    </footer>
+  </div>
+  
   <script>
     // Inicialize o DataTable
     $(document).ready(function() {

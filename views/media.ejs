@@ -6,27 +6,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Média Salarial por Cargo em Cada Universidade</title>
+  <link rel="stylesheet" href="/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
-  <div>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/media">Média</a></li>
-        <li><a href="/remuneracao">Remuneração</a></li>
-        <li><a href="/deducoes">Total Deduções</a></li>
-        <li><a href="/acima">Salários acima da média</a></li>
-      </ul>
-    </nav>  
+  <header>
+    <div class="navbar">
+      <a href="/"><p>Informações</p></a>
+      <a href="/media"><p>Média</p></a>
+      <a href="/remuneracao"><p>Remuneração</p></a>
+      <a href="/deducoes"><p>Total Deduções</p></a>
+      <a href="/acima"><p>Salários acima da média</p></a>
+    </div>
+  </header>
+  <div class="page-container">
+    <div class="content-wrap">
+      <h1 class="title">Média Salarial por Cargo em Cada Universidade</h1>
+      <div style="width: 800px;">
+        <canvas id="barChart" width="50" height="50"></canvas>
+      </div>
+    </div>
+    <footer>
+      Desenvolvido por Nicolas, Pedro e Tsai - 2023.
+    </footer>
   </div>
   
-  <h1>Média Salarial por Cargo em Cada Universidade</h1>
-  <div style="width: 800px;">
-    <canvas id="barChart" width="50" height="50"></canvas>
-  </div>
-
   <script>
     // Dados vindos do servidor
     var results = JSON.parse('<%- JSON.stringify(results) %>');
