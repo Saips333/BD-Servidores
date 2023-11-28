@@ -13,15 +13,15 @@
       <a href="/"><p>Informações</p></a>
       <a href="/media"><p>Média</p></a>
       <a href="/remuneracao"><p>Remuneração</p></a>
-      <a href="/deducoes"><p>Total Deduções</p></a>
-      <a href="/acima"><p>Salários acima da média</p></a>
+      <a href="/deducoes"><p>Deduções Totais</p></a>
+      <a href="/acima"><p>Acima da Média</p></a>
     </div>
   </header>
 
   <div class="page-container">
     <div class="content-wrap">
-      <h1 class="title">Total de Deduções por Universidade e Instituto</h1>
-      <div style="width: 100%; height: 100%;">
+      <h1 class="title">Total de Deduções por Universidade</h1>
+      <div style="width: 80%; height: 100%;">
         <canvas id="barChart" width="1000" height="500"></canvas>
       </div>
     </div> 
@@ -33,38 +33,47 @@
   <script>
     // Dados vindos do servidor
     var results = JSON.parse('<%- JSON.stringify(results) %>');
-    var universidades = Array.from(new Set(results.map(result => result.NomeUniversidade))); // Lista de universidades única
-    var institutos = Array.from(new Set(results.map(result => result.NomeInstituto))); // Lista de institutos única
+    var universidades = Array.from(new Set(results.map(result => result.NomeUniversidade))); 
+    
+    // Calcular o total de deduções por universidade
+    var totalDeducoesPorUniversidade = results.reduce((acc, result) => {
+      if (!acc[result.NomeUniversidade]) {
+        acc[result.NomeUniversidade] = 0;
+      }
+      acc[result.NomeUniversidade] += result.TotalDeducoes;
+      return acc;
+    }, {});
 
-    // Cores fixas para as universidades
-    var universityColors = {
-      'Universidade A': getRandomColor(),
-      'Universidade B': getRandomColor(),
-      'Universidade C': getRandomColor(),
-    };
+    var datasets = [{
+      label: 'Total de Deduções',
+      data: Object.values(totalDeducoesPorUniversidade),
+      backgroundColor: Object.keys(totalDeducoesPorUniversidade).map(universidade => getRandomColor()),
+      labelColor: 'rgba(255, 255, 255, 1)',
+      borderColor: 'rgba(255, 255, 255, 1)',
+      borderWidth: 1,
+    }];
 
-    var datasets = universidades.map((universidade, index) => {
-      return {
-        label: universidade,
-        data: institutos.map(instituto => {
-          var deducao = results.find(result => result.NomeInstituto === instituto && result.NomeUniversidade === universidade);
-          return deducao < 0 ? deducao.TotalDeducoes : null;
-        }),
-        backgroundColor: universityColors[universidade] || getRandomColor(),
-        borderColor: 'rgba(255, 255, 255, 1)',
-        borderWidth: 1,
-      };
-    });
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
 
     var ctx = document.getElementById('barChart').getContext('2d');
 
     var barChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: institutos,
+        labels: Object.keys(totalDeducoesPorUniversidade),
         datasets: datasets,
       },
       options: {
+        legend: {
+          display: false,
+        },
         scales: {
           y: {
             beginAtZero: true,
@@ -76,21 +85,12 @@
           x: {
             title: {
               display: true,
-              text: 'Instituto',
+              text: '',
             },
           },
         },
       },
     });
-
-    function getRandomColor() {
-      var letters = '0123456789ABCDEF';
-      var color = '#';
-      for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
   </script>
 
 </body>

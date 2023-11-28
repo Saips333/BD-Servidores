@@ -15,14 +15,14 @@
       <a href="/"><p>Informações</p></a>
       <a href="/media"><p>Média</p></a>
       <a href="/remuneracao"><p>Remuneração</p></a>
-      <a href="/deducoes"><p>Total Deduções</p></a>
-      <a href="/acima"><p>Salários acima da média</p></a>
+      <a href="/deducoes"><p>Deduções Totais</p></a>
+      <a href="/acima"><p>Acima da Média</p></a>
     </div>
   </header>
   <div class="page-container">
     <div class="content-wrap">
-      <h1 class="title">Média Salarial por Cargo em Cada Universidade</h1>
-      <div style="width: 800px;">
+      <h1 class="title">Média Salarial por Cargo</h1>
+      <div style="width: 40%; margin: 0 0 50px 0">
         <canvas id="barChart" width="50" height="50"></canvas>
       </div>
     </div>
@@ -44,24 +44,22 @@
           var salario = results.find(result => result.cargo === cargo && result.NomeUniversidade === universidade);
           return salario ? salario.MediaSalario : null;
         }),
-        backgroundColor: getUniversityColor(cargo),
+        backgroundColor: getRandomColor(),
         borderColor: 'rgba(255, 255, 255, 1)',
         borderWidth: 1,
       };
     });
 
-    function getUniversityColor(cargo) {
-      // Use uma lógica de cores específica para cada cargo
-      var cargoColors = {
-        'Professor': 'rgba(255, 99, 132, 0.5)',
-        'Pesquisador': 'rgba(75, 192, 192, 0.5)',
-        'Coordenador': 'rgba(255, 205, 86, 0.5)',
-      };
-      // Se o cargo não estiver mapeado, use uma cor padrão
-      return cargoColors[cargo] || 'rgba(153, 102, 255, 0.5)';
-    }
-
     var ctx = document.getElementById('barChart').getContext('2d');
+
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
 
     var barChart = new Chart(ctx, {
       type: 'bar',
@@ -81,7 +79,7 @@
           x: {
             title: {
               display: true,
-              text: 'Universidade',
+              text: '',
             },
           },
         },

@@ -13,7 +13,7 @@
   <header>
     <div class="navbar">
       <a href="/"><p>Informações</p></a>
-      <a href="/media"><p>Média por Cargo</p></a>
+      <a href="/media"><p>Média</p></a>
       <a href="/remuneracao"><p>Remuneração</p></a>
       <a href="/deducoes"><p>Deduções Totais</p></a>
       <a href="/acima"><p>Acima da Média</p></a>
@@ -21,11 +21,11 @@
   </header>
   <div class="page-container">
     <div class="content-wrap">
-      <h1 class="title">Salários acima da média</h1>
+      <h1 class="title">Salários Acima da Média</h1>
       <table id="dataTable" class="display">
         <thead>
           <tr>
-            <th>CPF</th>
+            <th>ID</th>
             <th>Nome do Servidor</th>
             <th>Cargo</th>
             <th>Universidade</th>
@@ -36,7 +36,7 @@
         <tbody>
           <% for (const servidor of results) { %>
             <tr>
-              <td><%= servidor.cpf %></td>
+              <td><%= servidor.id_servidor %></td>
               <td><%= servidor.NomeServidor %></td>
               <td><%= servidor.cargo %></td>
               <td><%= servidor.NomeUniversidade %></td>

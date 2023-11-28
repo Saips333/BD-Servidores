@@ -15,29 +15,29 @@
       <a href="/"><p>Informações</p></a>
       <a href="/media"><p>Média</p></a>
       <a href="/remuneracao"><p>Remuneração</p></a>
-      <a href="/deducoes"><p>Total Deduções</p></a>
-      <a href="/acima"><p>Salários acima da média</p></a>
+      <a href="/deducoes"><p>Deduções Totais</p></a>
+      <a href="/acima"><p>Acima da Média</p></a>
     </div>
   </header>
 
   <div class="page-container">
     <div class="content-wrap">
-      <h1 class="title">Informações sobre Servidores</h1>
+      <h1 class="title">Remuneração dos Servidores</h1>
       <table id="dataTable" class="display">
         <thead>
           <tr>
-            <th>CPF</th>
+            <th>ID</th>
             <th>Nome do Servidor</th>
-            <th>Bruto</th>
-            <th>Outras deduções</th>
-            <th>Férias</th>
-            <th>Natal</th>
+            <th>Bruto (R$)</th>
+            <th>Outras deduções (R$)</th>
+            <th>Férias (R$)</th>
+            <th>Natal (R$)</th>
           </tr>
         </thead>
         <tbody>
           <% for (const servidor of results) { %>
             <tr>
-              <td><%= servidor.cpf %></td>
+              <td><%= servidor.id_servidor %></td>
               <td><%= servidor.NomeServidor %></td>
               <td data-order="<%= servidor.bruto %>"><%= servidor.val_bruto %></td>
               <td data-order="<%= servidor.outras_deducoes %>"><%= servidor.outras_deducoes %></td>

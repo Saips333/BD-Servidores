@@ -7,13 +7,13 @@ import sqlalchemy
 warnings.filterwarnings("ignore")
 pd.options.mode.chained_assignment = None
 
-print("Iniciando inserção de dados... ⌛")
+print("⌛\tIniciando inserção de dados...")
 
 # Importação dos arquivos csv
 cadastro = pd.read_csv('./public/202307_Cadastro.csv', encoding='iso-8859-1', sep=';')
 remuneracao = pd.read_csv('./public/202307_Remuneracao.csv', encoding='iso-8859-1', sep=';')
 
-print("Importações concluídas. 🟦⬜⬜⬜⬜")
+print("🕒\tImportações concluídas.")
 
 # Filtragem para que se tenha apenas os servidores do RJ
 filtered_cadastro = cadastro[cadastro['UF_EXERCICIO'].isin(['RJ', '-1'])]
@@ -22,9 +22,9 @@ filtered_cadastro = cadastro[cadastro['UF_EXERCICIO'].isin(['RJ', '-1'])]
 filtered_cadastro = filtered_cadastro[filtered_cadastro['DESCRICAO_CARGO'].isin(['PROFESSOR 3 GRAU - SUBSTITUTO', 'PROFESSOR 3 GRAU - VISITANTE', 'PROFESSOR DO MAGISTERIO SUPERIOR', 'PROFESSOR ENS BASICO TECN TECNOLOGICO', 'PROFESSOR MAGISTERIO SUPERIOR -VISITANTE', 'PROFESSOR MAGISTERIO SUPERIOR-SUBSTITUTO', 'PROFESSOR MAGISTERIO SUPERIOR-TEMPORARIO', 'PROFESSOR TITULAR-LIVRE MAG SUPERIOR'])]
 
 # Filtragem para remoção dos servidores que exercem cargos em outras instituições fora as 3 universidades listadas
-filtered_cadastro = filtered_cadastro[filtered_cadastro['ORG_EXERCICIO'].isin(['Universidade Federal do Rio de Janeiro', 'Universidade Federal Rural do Rio de Janeiro', 'Universidade Federal Fluminense'])]
+filtered_cadastro = filtered_cadastro[filtered_cadastro['ORG_EXERCICIO'].isin(['Universidade Federal do Rio de Janeiro', 'Universidade Federal Rural do Rio de Janeiro', 'Universidade Federal Fluminense - RJ'])]
 
-filtered_cadastro = filtered_cadastro[filtered_cadastro['ORG_LOTACAO'].isin(['Universidade Federal do Rio de Janeiro', 'Universidade Federal Rural do Rio de Janeiro', 'Universidade Federal Fluminense'])]
+filtered_cadastro = filtered_cadastro[filtered_cadastro['ORG_LOTACAO'].isin(['Universidade Federal do Rio de Janeiro', 'Universidade Federal Rural do Rio de Janeiro', 'Universidade Federal Fluminense - RJ'])]
 
 # Remoção de colunas que não serão utilizadas
 filtered_cadastro.drop(columns=['DIPLOMA_INGRESSO_CARGOFUNCAO', 'DIPLOMA_INGRESSO_ORGAO', 'DIPLOMA_INGRESSO_SERVICOPUBLICO', 'CLASSE_CARGO', 'REFERENCIA_CARGO', 'PADRAO_CARGO', 'NIVEL_CARGO', 'SIGLA_FUNCAO', 'NIVEL_FUNCAO', 'FUNCAO', 'CODIGO_ATIVIDADE', 'CLASSE_CARGO', 'ATIVIDADE', 'OPCAO_PARCIAL', 'COD_ORGSUP_LOTACAO', 'ORGSUP_LOTACAO', 'COD_ORGSUP_EXERCICIO', 'ORGSUP_EXERCICIO', 'COD_TIPO_VINCULO', 'TIPO_VINCULO', 'DATA_INICIO_AFASTAMENTO', 'DATA_TERMINO_AFASTAMENTO', 'DATA_NOMEACAO_CARGOFUNCAO', 'DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO', 'DOCUMENTO_INGRESSO_SERVICOPUBLICO','REGIME_JURIDICO', 'SITUACAO_VINCULO', 'DATA_INGRESSO_CARGOFUNCAO', 'UF_EXERCICIO', 'COD_ORG_EXERCICIO', 'COD_UORG_EXERCICIO',	'UORG_EXERCICIO', 'MATRICULA', 'JORNADA_DE_TRABALHO', 'ORG_EXERCICIO'], inplace=True)
@@ -32,7 +32,9 @@ filtered_cadastro.drop(columns=['DIPLOMA_INGRESSO_CARGOFUNCAO', 'DIPLOMA_INGRESS
 # Renomeação de colunas
 filtered_cadastro.rename(columns={'Id_SERVIDOR_PORTAL': 'id_servidor', 'NOME': 'nome', 'CPF': 'cpf', 'DESCRICAO_CARGO': 'cargo', 'COD_UORG_LOTACAO': 'id_instituto','UORG_LOTACAO': 'nome_instituto', 'COD_ORG_LOTACAO': 'id_uni', 'ORG_LOTACAO': 'nome_uni', 'DATA_INGRESSO_ORGAO': 'data_ingresso' }, inplace=True)
 
-print("Filtragem de cadastro finalizada. 🟦🟦⬜⬜⬜")
+filtered_cadastro.loc[filtered_cadastro['nome_uni'] == 'Universidade Federal Fluminense - RJ', 'nome_uni'] = 'Universidade Federal Fluminense'
+
+print("🕕\tFiltragem de cadastro finalizada.")
 
 # Junção das colunas de mês e ano para que se tenha apenas uma coluna de data
 filtered_remuneracao = remuneracao[remuneracao['MES'].isin([7.0])]
@@ -64,7 +66,7 @@ filtered_remuneracao['pss/rpgs'] = filtered_remuneracao['pss/rpgs'].fillna(0)
 filtered_remuneracao['outras_deducoes'] = filtered_remuneracao['outras_deducoes'].fillna(0)
 filtered_remuneracao['val_liquido'] = filtered_remuneracao['val_liquido'].fillna(0)
 
-print("Filtragem de remuneração finalizada. 🟦🟦🟦⬜⬜")
+print("🕘\tFiltragem de remuneração finalizada. ")
 
 # Conexão com o banco de dados
 conexao = sqlalchemy.create_engine('mysql+mysqlconnector://root:root@localhost:33061/servidores', echo=False)
@@ -84,7 +86,7 @@ servidor_data['data_ingresso'] = pd.to_datetime(servidor_data['data_ingresso'], 
 servidor_data = servidor_data[~servidor_data['id_servidor'].duplicated()]
 servidor_data[['id_servidor', 'nome', 'cpf', 'cargo', 'data_ingresso', 'fk_servidor_instituto', 'fk_servidor_universidade']].to_sql('Servidor', con=conexao, if_exists='append', index=False, method='multi', chunksize=10000)
 
-print("Metade das inserções concluídas. 🟦🟦🟦🟦⬜")
+print("🕛\tMetade das inserções concluídas.")
 
 # Inserção dos dados na tabela Remuneracao
 remuneracao_data = filtered_remuneracao[filtered_remuneracao['id_servidor'].isin(filtered_cadastro['id_servidor'])]
@@ -96,4 +98,4 @@ column_titles = ['irrf', 'pss/rpgs']
 imposto_data = pd.DataFrame({'nome_imposto': [title.upper() for title in column_titles]})
 imposto_data.to_sql('Imposto', con=conexao, if_exists='append', index=False, method='multi', chunksize=10000)
 
-print("Dados inseridos com sucesso! ✅")
+print("✅\tDados inseridos com sucesso!")

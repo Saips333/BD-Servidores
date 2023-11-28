@@ -15,7 +15,7 @@ router.get('/media', (req, res) => {
   connection.query(`
   SELECT
   U.nome_uni AS NomeUniversidade,
-  S.cargo ,
+  S.cargo,
   AVG(R.val_bruto) AS MediaSalario
   FROM
     Universidade U
@@ -37,7 +37,7 @@ router.get('/media', (req, res) => {
 router.get('/remuneracao', (req, res) => {
   connection.query(`
   SELECT 
-    S.cpf, 
+    S.id_servidor, 
     S.nome AS NomeServidor, 
     R.val_bruto, 
     R.outras_deducoes, 
@@ -57,18 +57,15 @@ router.get('/deducoes', (req, res) => {
   connection.query(`
   SELECT
     U.nome_uni AS NomeUniversidade,
-    I.nome_instituto AS NomeInstituto,
     SUM(R.outras_deducoes) AS TotalDeducoes
   FROM
       Universidade U
   JOIN
-      Instituto I ON U.id_uni = I.fk_instituto_universidade
-  JOIN
-      Servidor S ON I.id_instituto = S.fk_servidor_instituto AND I.fk_instituto_universidade = S.fk_servidor_universidade
+      Servidor S ON U.id_uni = S.fk_servidor_universidade
   JOIN
       Remuneracao R ON S.id_servidor = R.fk_remuneracao_servidor
   GROUP BY
-      U.nome_uni, I.nome_instituto
+      U.nome_uni
   HAVING
       TotalDeducoes < 0;
   `, (error, results) => {
@@ -91,7 +88,7 @@ router.get('/acima', (req, res) => {
         S.fk_servidor_universidade
   )
   SELECT
-    S.cpf,
+    S.id_servidor,
     S.nome AS NomeServidor,
     S.cargo,
     U.nome_uni AS NomeUniversidade,
